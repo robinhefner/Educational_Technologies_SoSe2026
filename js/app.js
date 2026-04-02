@@ -1,4 +1,6 @@
-import { clinicalCase } from './data.js';
+// Data loaded from data.js globally
+
+let clinicalCase;
 
 // Application State
 const state = {
@@ -166,18 +168,40 @@ function renderFeedback(container) {
         diagFeedbackStr = `Excellent diagnostic choices. You avoided unnecessary tests.`;
     }
 
+    // SUMMATIVE ASSESSMENT CALCULATION
+    let score = 0;
+    if (isCorrect) score += 60; // 60 points for correct diagnosis
+
+    let diagScore = 40 - (irrelevantCount * 15); // penalize 15 points per irrelevant test
+    if (diagScore < 0) diagScore = 0;
+    score += diagScore;
+
+    let gradeText = "";
+    if (score >= 90) gradeText = "Excellent (Pass)";
+    else if (score >= 70) gradeText = "Good (Pass)";
+    else if (score >= 50) gradeText = "Satisfactory (Pass)";
+    else gradeText = "Needs Improvement (Fail)";
+
     const html = `
-        <h2 class="section-title">Stage 4: Feedback & Reflection</h2>
+        <h2 class="section-title">Stage 4: Feedback & Assessment</h2>
         <p class="description">Here is the evaluation of your clinical reasoning processes.</p>
         
+        <div class="feedback-card" style="border-left: 4px solid #8b5cf6; background: rgba(139, 92, 246, 0.1);">
+            <div class="feedback-title" style="color: #c4b5fd;">Summative Assessment</div>
+            <h1 style="font-size: 2.5rem; margin: 10px 0; color: #fff;">${score} / 100</h1>
+            <p style="font-weight: bold; font-size: 1.1rem;">Final Grade: ${gradeText}</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: var(--text-secondary);">Formative Feedback:</h3>
+
         <div class="feedback-card ${isCorrect ? 'success' : 'danger'}">
-            <div class="feedback-title ${isCorrect ? 'success' : 'danger'}">${isCorrect ? 'Correct Diagnosis!' : 'Incorrect Diagnosis'}</div>
+            <div class="feedback-title ${isCorrect ? 'success' : 'danger'}">${isCorrect ? 'Correct Diagnosis (+60 pts)' : 'Incorrect Diagnosis (0 pts)'}</div>
             <p>${isCorrect ? clinicalCase.diagnosisObj.feedbackSuccess : clinicalCase.diagnosisObj.feedbackFailure}</p>
             <p style="margin-top:0.5rem; opacity:0.8;">Your Submission: <em>"${state.submittedDiagnosis}"</em></p>
         </div>
 
         <div class="feedback-card ${irrelevantCount === 0 ? 'success' : 'warning'}">
-            <div class="feedback-title ${irrelevantCount === 0 ? 'success' : 'warning'}">Diagnostic Efficiency</div>
+            <div class="feedback-title ${irrelevantCount === 0 ? 'success' : 'warning'}">Diagnostic Efficiency (+${diagScore} pts)</div>
             <p>${diagFeedbackStr}</p>
         </div>
 
@@ -188,6 +212,7 @@ function renderFeedback(container) {
     container.innerHTML = html;
 
     container.querySelector('#restart-btn').onclick = () => {
+        clinicalCase = clinicalCases[Math.floor(Math.random() * clinicalCases.length)];
         state.stage = 'anamnesis';
         state.selectedQuestions.clear();
         state.selectedDiagnostics.clear();
@@ -198,5 +223,6 @@ function renderFeedback(container) {
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
+    clinicalCase = clinicalCases[Math.floor(Math.random() * clinicalCases.length)];
     render();
 });
