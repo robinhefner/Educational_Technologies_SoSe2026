@@ -63,8 +63,8 @@ function renderAnamnesis(container) {
         <h2 class="section-title">Stage 1: Anamnesis</h2>
         <p class="description">${clinicalCase.intro}<br><br>Select questions to ask the patient:</p>
         <div class="item-list" id="questions-list"></div>
-        <div class="nav-row">
-            <button class="btn" id="next-to-diag">Proceed to Diagnostics</button>
+        <div class="nav-row" style="justify-content: flex-end;">
+            <button class="btn" id="next-to-diag">Proceed to Diagnostics &rarr;</button>
         </div>
     `;
     container.innerHTML = html;
@@ -97,8 +97,9 @@ function renderDiagnostics(container) {
         <h2 class="section-title">Stage 2: Diagnostics</h2>
         <p class="description">Select clinical tests to order. Keep relevance and costs in mind.</p>
         <div class="item-list" id="tests-list"></div>
-        <div class="nav-row">
-            <button class="btn" id="next-to-diagnosis">Proceed to Diagnosis</button>
+        <div class="nav-row" style="justify-content: space-between;">
+            <button class="btn" id="back-to-anamnesis" style="background: var(--text-secondary);">&larr; Back to Anamnesis</button>
+            <button class="btn" id="next-to-diagnosis">Proceed to Diagnosis &rarr;</button>
         </div>
     `;
     container.innerHTML = html;
@@ -131,6 +132,11 @@ function renderDiagnostics(container) {
         list.appendChild(item);
     });
 
+    container.querySelector('#back-to-anamnesis').onclick = () => {
+        state.stage = 'anamnesis';
+        render();
+    };
+
     container.querySelector('#next-to-diagnosis').onclick = () => {
         state.stage = 'diagnosis';
         render();
@@ -144,8 +150,9 @@ function renderDiagnosis(container) {
         <div class="input-group">
             <input type="text" class="text-input" id="diagnosis-input" placeholder="e.g. Broken Arm" value="${state.submittedDiagnosis}">
         </div>
-        <div class="nav-row">
-            <button class="btn" id="submit-diagnosis">Submit Diagnosis</button>
+        <div class="nav-row" style="justify-content: space-between;">
+            <button class="btn" id="back-to-diagnostics" style="background: var(--text-secondary);">&larr; Back to Diagnostics</button>
+            <button class="btn" id="submit-diagnosis">Submit Diagnosis &rarr;</button>
         </div>
     `;
     container.innerHTML = html;
@@ -154,6 +161,11 @@ function renderDiagnosis(container) {
     input.addEventListener('input', (e) => {
         state.submittedDiagnosis = e.target.value;
     });
+
+    container.querySelector('#back-to-diagnostics').onclick = () => {
+        state.stage = 'diagnostics';
+        render();
+    };
 
     container.querySelector('#submit-diagnosis').onclick = () => {
         if (!state.submittedDiagnosis.trim()) {
@@ -223,25 +235,57 @@ function renderFeedback(container) {
             <p>${diagFeedbackStr}</p>
         </div>
 
-        <div class="nav-row">
-            <button class="btn" id="restart-btn">Restart Simulation</button>
+        <div class="nav-row" style="justify-content: ${isCorrect ? 'flex-end' : 'space-between'};">
+            ${!isCorrect ? '<button class="btn" id="give-up-btn" style="background: var(--danger-color);">Give Up (Next Patient)</button>' : ''}
+            ${!isCorrect ? '<button class="btn" id="return-btn">Return to Patient &olarr;</button>' : ''}
+            ${isCorrect ? '<button class="btn" id="next-patient-btn">Next Patient &rarr;</button>' : ''}
         </div>
     `;
     container.innerHTML = html;
 
-    container.querySelector('#restart-btn').onclick = () => {
-        clinicalCase = clinicalCases[Math.floor(Math.random() * clinicalCases.length)];
-        state.stage = 'anamnesis';
-        state.selectedQuestions.clear();
-        state.selectedDiagnostics.clear();
-        state.submittedDiagnosis = '';
-        state.budget = state.initialBudget;
-        render();
-    };
+    if (isCorrect) {
+        container.querySelector('#next-patient-btn').onclick = () => {
+            clinicalCase = clinicalCases[Math.floor(Math.random() * clinicalCases.length)];
+            state.stage = 'anamnesis';
+            state.selectedQuestions.clear();
+            state.selectedDiagnostics.clear();
+            state.submittedDiagnosis = '';
+            state.budget = state.initialBudget;
+            render();
+        };
+    } else {
+        container.querySelector('#return-btn').onclick = () => {
+            state.stage = 'diagnostics';
+            render();
+        };
+        container.querySelector('#give-up-btn').onclick = () => {
+            clinicalCase = clinicalCases[Math.floor(Math.random() * clinicalCases.length)];
+            state.stage = 'anamnesis';
+            state.selectedQuestions.clear();
+            state.selectedDiagnostics.clear();
+            state.submittedDiagnosis = '';
+            state.budget = state.initialBudget;
+            render();
+        };
+    }
 }
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
+    // Top Nav Indicators Clickable (unless in feedback)
+    const setNav = (id, targetStage) => {
+        indicators[id].style.cursor = 'pointer';
+        indicators[id].onclick = () => {
+            if (state.stage !== 'feedback') {
+                state.stage = targetStage;
+                render();
+            }
+        };
+    };
+    setNav('anamnesis', 'anamnesis');
+    setNav('diagnostics', 'diagnostics');
+    setNav('diagnosis', 'diagnosis');
+
     clinicalCase = clinicalCases[Math.floor(Math.random() * clinicalCases.length)];
     render();
 });
