@@ -14,8 +14,11 @@
         <header id="app-header">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h1 style="margin-bottom: 0;">Clinical Simulation</h1>
-                <div id="budget-display" style="font-size: 1.1rem; font-weight: 600; padding: 0.5rem 1rem; background: #e0f2fe; border: 1px solid var(--accent-color); border-radius: 8px; color: var(--accent-hover);">
-                    Budget: $<span id="budget-amount">1000</span>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <button class="btn" id="dashboard-btn" style="background: var(--text-secondary); padding: 0.5rem 1rem;">&#128202; Dashboard</button>
+                    <div id="budget-display" style="font-size: 1.1rem; font-weight: 600; padding: 0.5rem 1rem; background: #e0f2fe; border: 1px solid var(--accent-color); border-radius: 8px; color: var(--accent-hover);">
+                        Budget: $<span id="budget-amount">1000</span>
+                    </div>
                 </div>
             </div>
             <div id="progress-bar-container">
@@ -32,6 +35,32 @@
         <main id="app-content">
             <!-- Dynamic Components will be injected here -->
         </main>
+    </div>
+
+    <!-- Dashboard Modal -->
+    <div class="modal-overlay" id="dashboard-modal">
+        <div class="modal-content">
+            <h2 class="section-title" style="margin-bottom: 1.5rem;">Learning Analytics</h2>
+            <div class="stat-row">
+                <span class="stat-label">Cases Successfully Solved:</span>
+                <span class="stat-value" id="stat-cases">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Average Score:</span>
+                <span class="stat-value" id="stat-score">0 / 100</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Budget Wasted (Irrelevant Tests):</span>
+                <span class="stat-value" id="stat-wasted" style="color: var(--danger-color);">$0</span>
+            </div>
+            <div class="stat-row" style="border-bottom: none; margin-top: 1rem; background: #f1f5f9; padding: 1rem; border-radius: 8px;">
+                <span class="stat-label" style="color: var(--text-primary);">Current Difficulty (Fading):</span>
+                <span class="stat-value" id="stat-difficulty">Level 1</span>
+            </div>
+            <div class="nav-row" style="margin-top: 1.5rem;">
+                <button class="btn" id="close-modal-btn">Close Dashboard</button>
+            </div>
+        </div>
     </div>
 
     <!-- Data & Application Logic -->

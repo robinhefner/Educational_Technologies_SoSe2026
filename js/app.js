@@ -2,6 +2,18 @@
 
 let clinicalCase;
 
+function loadAnalytics() {
+    try {
+        const data = localStorage.getItem('clinicalSimAnalytics');
+        if (data) return JSON.parse(data);
+    } catch(e) {}
+    return { casesSolved: 0, totalScore: 0, totalWasted: 0 };
+}
+
+function saveAnalytics() {
+    localStorage.setItem('clinicalSimAnalytics', JSON.stringify(state.analytics));
+}
+
 const state = {
     stage: 'anamnesis', // anamnesis, diagnostics, diagnosis, feedback
     selectedQuestions: new Set(),
@@ -9,8 +21,22 @@ const state = {
     submittedDiagnosis: '',
     progress: 25,
     budget: 1000,
-    initialBudget: 1000
+    initialBudget: 1000,
+    analytics: loadAnalytics()
 };
+
+function setupNewCase() {
+    clinicalCase = clinicalCases[Math.floor(Math.random() * clinicalCases.length)];
+    state.stage = 'anamnesis';
+    state.selectedQuestions.clear();
+    state.selectedDiagnostics.clear();
+    state.submittedDiagnosis = '';
+    
+    // Fading logic: reduce initial budget by $100 per case solved, max down to $500.
+    state.initialBudget = Math.max(500, 1000 - (state.analytics.casesSolved * 100));
+    state.budget = state.initialBudget;
+    render();
+}
 
 const appContent = document.getElementById('app-content');
 const progressBar = document.getElementById('progress-bar');
@@ -212,14 +238,34 @@ function renderFeedback(container) {
     else if (score >= 50) gradeText = "Satisfactory (Pass)";
     else gradeText = "Needs Improvement (Fail)";
 
+    // Fading UI Text
+    const lvl = Math.min(5, state.analytics.casesSolved + 1);
+
+    // Expert Modeling Path
+    const relevantTests = clinicalCase.diagnostics.filter(t => t.isRelevant);
+    const optimalCost = relevantTests.reduce((sum, t) => sum + t.cost, 0);
+    const optimalTestsNames = relevantTests.map(t => t.name).join(', ') || "None required";
+    
+    const wastedMoney = Array.from(state.selectedDiagnostics)
+                             .filter(id => !clinicalCase.diagnostics.find(t => t.id === id).isRelevant)
+                             .reduce((sum, id) => sum + clinicalCase.diagnostics.find(t => t.id === id).cost, 0);
+
     const html = `
         <h2 class="section-title">Stage 4: Feedback & Assessment</h2>
         <p class="description">Here is the evaluation of your clinical reasoning processes.</p>
         
-        <div class="feedback-card" style="border-left: 4px solid #8b5cf6; background: rgba(139, 92, 246, 0.1);">
-            <div class="feedback-title" style="color: #c4b5fd;">Summative Assessment</div>
-            <h1 style="font-size: 2.5rem; margin: 10px 0; color: #fff;">${score} / 100</h1>
+        <div class="feedback-card" style="border-left: 4px solid var(--accent-color);">
+            <div class="feedback-title" style="color: var(--accent-color);">Summative Assessment</div>
+            <h1 style="font-size: 2.5rem; margin: 10px 0;">${score} / 100</h1>
             <p style="font-weight: bold; font-size: 1.1rem;">Final Grade: ${gradeText}</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: var(--text-secondary);">Expert's Path (Cognitive Modeling):</h3>
+        <div class="feedback-card" style="border-left: 4px solid var(--text-secondary);">
+            <div class="feedback-title" style="color: var(--text-secondary);">How an expert would approach this:</div>
+            <p style="margin-bottom: 0.5rem; margin-top: 0.5rem;">An experienced doctor prioritizes cost-effectiveness and only orders immediately relevant diagnostics. For this case, the optimal targeted diagnostics were: <br><strong>${optimalTestsNames}</strong>.</p>
+            <p style="font-size: 0.9rem;"><strong>Optimal Cost:</strong> $${optimalCost}</p>
+            <p style="font-size: 0.9rem;"><strong>Your Expenditure on Irrelevant Tests:</strong> <span style="color: var(--danger-color);">$${wastedMoney}</span></p>
         </div>
 
         <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: var(--text-secondary);">Formative Feedback:</h3>
@@ -245,13 +291,11 @@ function renderFeedback(container) {
 
     if (isCorrect) {
         container.querySelector('#next-patient-btn').onclick = () => {
-            clinicalCase = clinicalCases[Math.floor(Math.random() * clinicalCases.length)];
-            state.stage = 'anamnesis';
-            state.selectedQuestions.clear();
-            state.selectedDiagnostics.clear();
-            state.submittedDiagnosis = '';
-            state.budget = state.initialBudget;
-            render();
+            state.analytics.casesSolved++;
+            state.analytics.totalScore += score;
+            state.analytics.totalWasted += wastedMoney;
+            saveAnalytics();
+            setupNewCase();
         };
     } else {
         container.querySelector('#return-btn').onclick = () => {
@@ -259,13 +303,9 @@ function renderFeedback(container) {
             render();
         };
         container.querySelector('#give-up-btn').onclick = () => {
-            clinicalCase = clinicalCases[Math.floor(Math.random() * clinicalCases.length)];
-            state.stage = 'anamnesis';
-            state.selectedQuestions.clear();
-            state.selectedDiagnostics.clear();
-            state.submittedDiagnosis = '';
-            state.budget = state.initialBudget;
-            render();
+            state.analytics.totalWasted += wastedMoney;
+            saveAnalytics();
+            setupNewCase();
         };
     }
 }
@@ -286,6 +326,27 @@ document.addEventListener('DOMContentLoaded', () => {
     setNav('diagnostics', 'diagnostics');
     setNav('diagnosis', 'diagnosis');
 
-    clinicalCase = clinicalCases[Math.floor(Math.random() * clinicalCases.length)];
-    render();
+    setupNewCase();
+
+    // Dashboard Modal Logic
+    const dashboardBtn = document.getElementById('dashboard-btn');
+    if (dashboardBtn) {
+        dashboardBtn.onclick = () => {
+            document.getElementById('stat-cases').innerText = state.analytics.casesSolved;
+            const avg = state.analytics.casesSolved > 0 ? (state.analytics.totalScore / state.analytics.casesSolved).toFixed(1) : 0;
+            document.getElementById('stat-score').innerText = `${avg} / 100`;
+            document.getElementById('stat-wasted').innerText = `$${state.analytics.totalWasted}`;
+            
+            const lvl = Math.min(5, state.analytics.casesSolved + 1);
+            document.getElementById('stat-difficulty').innerText = `Level ${lvl}`;
+            
+            document.getElementById('dashboard-modal').classList.add('open');
+        };
+    }
+    const closeBtn = document.getElementById('close-modal-btn');
+    if (closeBtn) {
+        closeBtn.onclick = () => {
+            document.getElementById('dashboard-modal').classList.remove('open');
+        };
+    }
 });
