@@ -12,11 +12,11 @@ const clinicalCases = [
             { id: "q6", text: "Do you have any family history of heart disease?", result: "My grandfather had a heart attack at 70.", isRelevant: false }
         ],
         diagnostics: [
-            { id: "t1", name: "Physical Examination (Abdomen)", result: "Tenderness in the right lower quadrant (McBurney's point). Positive rebound tenderness.", isRelevant: true, cost: "Low" },
-            { id: "t2", name: "Complete Blood Count (CBC)", result: "Leukocytes: 14.5 x 10^9/L (Elevated). Neutrophil dominance.", isRelevant: true, cost: "Low" },
-            { id: "t3", name: "Abdominal Ultrasound", result: "Enlarged, non-compressible appendix with a diameter of 8mm.", isRelevant: true, cost: "Medium" },
-            { id: "t4", name: "Chest X-Ray", result: "Clear lung fields. Normal.", isRelevant: false, cost: "Low" },
-            { id: "t5", name: "Urinalysis", result: "Normal. To rule out UTI.", isRelevant: true, cost: "Low" }
+            { id: "t1", name: "Physical Examination (Abdomen)", result: "Tenderness in the right lower quadrant (McBurney's point). Positive rebound tenderness.", isRelevant: true, cost: 100 },
+            { id: "t2", name: "Complete Blood Count (CBC)", result: "Leukocytes: 14.5 x 10^9/L (Elevated). Neutrophil dominance.", isRelevant: true, cost: 100 },
+            { id: "t3", name: "Abdominal Ultrasound", result: "Enlarged, non-compressible appendix with a diameter of 8mm.", isRelevant: true, cost: 300 },
+            { id: "t4", name: "Chest X-Ray", result: "Clear lung fields. Normal.", isRelevant: false, cost: 100 },
+            { id: "t5", name: "Urinalysis", result: "Normal. To rule out UTI.", isRelevant: true, cost: 100 }
         ],
         diagnosisObj: {
             correctDiagnoses: ["acute appendicitis", "appendicitis"],
@@ -36,11 +36,11 @@ const clinicalCases = [
             { id: "q5", text: "Have you ever had pain like this before?", result: "I had milder versions of this after heavy meals, but they always went away.", isRelevant: true }
         ],
         diagnostics: [
-            { id: "t1", name: "Physical Examination (Abdomen)", result: "Tenderness in the right upper quadrant. Positive Murphy's sign.", isRelevant: true, cost: "Low" },
-            { id: "t2", name: "Complete Blood Count (CBC)", result: "Leukocytes (WBC): 12.0 x 10^9/L (Slightly Elevated).", isRelevant: true, cost: "Low" },
-            { id: "t3", name: "Abdominal Ultrasound", result: "Gallbladder wall thickening (5mm) and pericholecystic fluid. Multiple gallstones visible.", isRelevant: true, cost: "Medium" },
-            { id: "t4", name: "Brain MRI", result: "Normal.", isRelevant: false, cost: "High" },
-            { id: "t5", name: "Liver Function Tests (LFTs)", result: "Mild elevation of AST and ALT.", isRelevant: true, cost: "Low" }
+            { id: "t1", name: "Physical Examination (Abdomen)", result: "Tenderness in the right upper quadrant. Positive Murphy's sign.", isRelevant: true, cost: 100 },
+            { id: "t2", name: "Complete Blood Count (CBC)", result: "Leukocytes (WBC): 12.0 x 10^9/L (Slightly Elevated).", isRelevant: true, cost: 100 },
+            { id: "t3", name: "Abdominal Ultrasound", result: "Gallbladder wall thickening (5mm) and pericholecystic fluid. Multiple gallstones visible.", isRelevant: true, cost: 300 },
+            { id: "t4", name: "Brain MRI", result: "Normal.", isRelevant: false, cost: 600 },
+            { id: "t5", name: "Liver Function Tests (LFTs)", result: "Mild elevation of AST and ALT.", isRelevant: true, cost: 100 }
         ],
         diagnosisObj: {
             correctDiagnoses: ["acute cholecystitis", "cholecystitis", "gallstones", "gallstone disease"],
@@ -60,11 +60,11 @@ const clinicalCases = [
             { id: "q5", text: "Do you have any history of asthma?", result: "No, never.", isRelevant: false }
         ],
         diagnostics: [
-            { id: "t1", name: "12-Lead Electrocardiogram (ECG)", result: "ST-segment elevations in leads V2-V4 (Anterior wall ischemia).", isRelevant: true, cost: "Low" },
-            { id: "t2", name: "Cardiac Troponin Test", result: "Highly elevated.", isRelevant: true, cost: "Low" },
-            { id: "t3", name: "Physical Examination (Chest)", result: "No reproducible tenderness on palpation of chest wall. Diaphoretic.", isRelevant: true, cost: "Low" },
-            { id: "t4", name: "Abdominal Ultrasound", result: "Normal.", isRelevant: false, cost: "Medium" },
-            { id: "t5", name: "Urinalysis", result: "Normal.", isRelevant: false, cost: "Low" }
+            { id: "t1", name: "12-Lead Electrocardiogram (ECG)", result: "ST-segment elevations in leads V2-V4 (Anterior wall ischemia).", isRelevant: true, cost: 100 },
+            { id: "t2", name: "Cardiac Troponin Test", result: "Highly elevated.", isRelevant: true, cost: 100 },
+            { id: "t3", name: "Physical Examination (Chest)", result: "No reproducible tenderness on palpation of chest wall. Diaphoretic.", isRelevant: true, cost: 100 },
+            { id: "t4", name: "Abdominal Ultrasound", result: "Normal.", isRelevant: false, cost: 300 },
+            { id: "t5", name: "Urinalysis", result: "Normal.", isRelevant: false, cost: 100 }
         ],
         diagnosisObj: {
             correctDiagnoses: ["myocardial infarction", "heart attack", "stemi", "acute myocardial infarction"],
@@ -84,11 +84,11 @@ const clinicalCases = [
             { id: "q5", text: "Do you have a history of heart problems?", result: "No.", isRelevant: false }
         ],
         diagnostics: [
-            { id: "t1", name: "Upper Endoscopy", result: "Visualization of a 1.5 cm ulcer in the duodenal bulb without active bleeding.", isRelevant: true, cost: "High" },
-            { id: "t2", name: "H. pylori breath test", result: "Positive carbon isotope detection.", isRelevant: true, cost: "Medium" },
-            { id: "t3", name: "Complete Blood Count (CBC)", result: "Normal hemoglobin levels (no severe bleeding).", isRelevant: true, cost: "Low" },
-            { id: "t4", name: "Brain CT Scanner", result: "Normal", isRelevant: false, cost: "High" },
-            { id: "t5", name: "Physical Examination", result: "Mild epigastric tenderness.", isRelevant: true, cost: "Low" }
+            { id: "t1", name: "Upper Endoscopy", result: "Visualization of a 1.5 cm ulcer in the duodenal bulb without active bleeding.", isRelevant: true, cost: 600 },
+            { id: "t2", name: "H. pylori breath test", result: "Positive carbon isotope detection.", isRelevant: true, cost: 300 },
+            { id: "t3", name: "Complete Blood Count (CBC)", result: "Normal hemoglobin levels (no severe bleeding).", isRelevant: true, cost: 100 },
+            { id: "t4", name: "Brain CT Scanner", result: "Normal", isRelevant: false, cost: 600 },
+            { id: "t5", name: "Physical Examination", result: "Mild epigastric tenderness.", isRelevant: true, cost: 100 }
         ],
         diagnosisObj: {
             correctDiagnoses: ["peptic ulcer", "peptic ulcer disease", "duodenal ulcer", "ulcer"],
@@ -108,11 +108,11 @@ const clinicalCases = [
             { id: "q5", text: "Are you experiencing nausea and vomiting?", result: "Yes, I have vomited multiple times today.", isRelevant: true }
         ],
         diagnostics: [
-            { id: "t1", name: "Serum Lipase and Amylase", result: "Lipase is remarkably elevated at 2,400 U/L (highly predictive).", isRelevant: true, cost: "Low" },
-            { id: "t2", name: "Abdominal CT Scan", result: "Enlarged pancreas with peripancreatic fluid, indicating inflammation. No pseudocyst.", isRelevant: true, cost: "Medium" },
-            { id: "t3", name: "Liver Function Tests (LFTs)", result: "Slightly elevated, but no severe derangement.", isRelevant: true, cost: "Low" },
-            { id: "t4", name: "Electrocardiogram (ECG)", result: "Normal sinus rhythm.", isRelevant: false, cost: "Low" },
-            { id: "t5", name: "Physical Exam", result: "Epigastric tenderness on palpation. Heart rate 110 bpm.", isRelevant: true, cost: "Low" }
+            { id: "t1", name: "Serum Lipase and Amylase", result: "Lipase is remarkably elevated at 2,400 U/L (highly predictive).", isRelevant: true, cost: 100 },
+            { id: "t2", name: "Abdominal CT Scan", result: "Enlarged pancreas with peripancreatic fluid, indicating inflammation. No pseudocyst.", isRelevant: true, cost: 300 },
+            { id: "t3", name: "Liver Function Tests (LFTs)", result: "Slightly elevated, but no severe derangement.", isRelevant: true, cost: 100 },
+            { id: "t4", name: "Electrocardiogram (ECG)", result: "Normal sinus rhythm.", isRelevant: false, cost: 100 },
+            { id: "t5", name: "Physical Exam", result: "Epigastric tenderness on palpation. Heart rate 110 bpm.", isRelevant: true, cost: 100 }
         ],
         diagnosisObj: {
             correctDiagnoses: ["acute pancreatitis", "pancreatitis"],
@@ -132,11 +132,11 @@ const clinicalCases = [
             { id: "q5", text: "Have you lost vision?", result: "No.", isRelevant: false }
         ],
         diagnostics: [
-            { id: "t1", name: "Urinalysis", result: "Microscopic hematuria (blood in urine). No bacteria.", isRelevant: true, cost: "Low" },
-            { id: "t2", name: "Non-contrast CT Abdomen/Pelvis", result: "A 4mm radiopaque calcification seen in the right proximal ureter. Mild hydronephrosis.", isRelevant: true, cost: "Medium" },
-            { id: "t3", name: "Physical Exam", result: "Right Costovertebral Angle (CVA) tenderness. Patient cannot sit still.", isRelevant: true, cost: "Low" },
-            { id: "t4", name: "Chest X-Ray", result: "Clear.", isRelevant: false, cost: "Low" },
-            { id: "t5", name: "Liver Function Tests (LFTs)", result: "Normal.", isRelevant: false, cost: "Low" }
+            { id: "t1", name: "Urinalysis", result: "Microscopic hematuria (blood in urine). No bacteria.", isRelevant: true, cost: 100 },
+            { id: "t2", name: "Non-contrast CT Abdomen/Pelvis", result: "A 4mm radiopaque calcification seen in the right proximal ureter. Mild hydronephrosis.", isRelevant: true, cost: 300 },
+            { id: "t3", name: "Physical Exam", result: "Right Costovertebral Angle (CVA) tenderness. Patient cannot sit still.", isRelevant: true, cost: 100 },
+            { id: "t4", name: "Chest X-Ray", result: "Clear.", isRelevant: false, cost: 100 },
+            { id: "t5", name: "Liver Function Tests (LFTs)", result: "Normal.", isRelevant: false, cost: 100 }
         ],
         diagnosisObj: {
             correctDiagnoses: ["kidney stones", "kidney stone", "nephrolithiasis", "renal colic", "ureteral calculus"],
@@ -156,11 +156,11 @@ const clinicalCases = [
             { id: "q5", text: "Have you had a fever or cough?", result: "No fever. I have a slight dry cough, but no phlegm.", isRelevant: true }
         ],
         diagnostics: [
-            { id: "t1", name: "D-Dimer Test", result: "Highly elevated (>2000 ng/mL).", isRelevant: true, cost: "Low" },
-            { id: "t2", name: "CT Pulmonary Angiography (CTPA)", result: "Filling defect in the right lower lobe pulmonary artery branch.", isRelevant: true, cost: "High" },
-            { id: "t3", name: "Doppler Ultrasound (Legs)", result: "Thrombus visualized in the left deep popliteal vein (DVT).", isRelevant: true, cost: "Medium" },
-            { id: "t4", name: "12-Lead ECG", result: "Sinus tachycardia. Occasional S1Q3T3 pattern.", isRelevant: true, cost: "Low" },
-            { id: "t5", name: "Endoscopy", result: "Normal stomach lining.", isRelevant: false, cost: "High" }
+            { id: "t1", name: "D-Dimer Test", result: "Highly elevated (>2000 ng/mL).", isRelevant: true, cost: 100 },
+            { id: "t2", name: "CT Pulmonary Angiography (CTPA)", result: "Filling defect in the right lower lobe pulmonary artery branch.", isRelevant: true, cost: 600 },
+            { id: "t3", name: "Doppler Ultrasound (Legs)", result: "Thrombus visualized in the left deep popliteal vein (DVT).", isRelevant: true, cost: 300 },
+            { id: "t4", name: "12-Lead ECG", result: "Sinus tachycardia. Occasional S1Q3T3 pattern.", isRelevant: true, cost: 100 },
+            { id: "t5", name: "Endoscopy", result: "Normal stomach lining.", isRelevant: false, cost: 600 }
         ],
         diagnosisObj: {
             correctDiagnoses: ["pulmonary embolism", "pe", "thromboembolism"],
@@ -180,11 +180,11 @@ const clinicalCases = [
             { id: "q5", text: "Does it hurt when you cough?", result: "Not specifically, but standing up dizzy makes it worse.", isRelevant: false }
         ],
         diagnostics: [
-            { id: "t1", name: "Urine Pregnancy Test (hCG)", result: "Positive.", isRelevant: true, cost: "Low" },
-            { id: "t2", name: "Transvaginal Ultrasound", result: "Empty uterus. Complex adnexal mass in the right fallopian tube and free fluid in the pelvis.", isRelevant: true, cost: "Medium" },
-            { id: "t3", name: "Serum quantitative bhCG", result: "3,500 mIU/mL.", isRelevant: true, cost: "Low" },
-            { id: "t4", name: "Chest X-Ray", result: "Normal.", isRelevant: false, cost: "Low" },
-            { id: "t5", name: "Physical Exam", result: "Adnexal tenderness on the right side. Cervical motion tenderness.", isRelevant: true, cost: "Low" }
+            { id: "t1", name: "Urine Pregnancy Test (hCG)", result: "Positive.", isRelevant: true, cost: 100 },
+            { id: "t2", name: "Transvaginal Ultrasound", result: "Empty uterus. Complex adnexal mass in the right fallopian tube and free fluid in the pelvis.", isRelevant: true, cost: 300 },
+            { id: "t3", name: "Serum quantitative bhCG", result: "3,500 mIU/mL.", isRelevant: true, cost: 100 },
+            { id: "t4", name: "Chest X-Ray", result: "Normal.", isRelevant: false, cost: 100 },
+            { id: "t5", name: "Physical Exam", result: "Adnexal tenderness on the right side. Cervical motion tenderness.", isRelevant: true, cost: 100 }
         ],
         diagnosisObj: {
             correctDiagnoses: ["ectopic pregnancy", "tubal pregnancy"],
@@ -204,11 +204,11 @@ const clinicalCases = [
             { id: "q5", text: "Do you have pain urinating?", result: "No.", isRelevant: false }
         ],
         diagnostics: [
-            { id: "t1", name: "Physical Exam (Lungs)", result: "Crackles/rales heard in the left lower lung base. Dullness to percussion.", isRelevant: true, cost: "Low" },
-            { id: "t2", name: "Chest X-Ray", result: "Lobar consolidation in the left lower lobe.", isRelevant: true, cost: "Low" },
-            { id: "t3", name: "Complete Blood Count (CBC)", result: "Leukocytes: 16.5 x 10^9/L (Significantly elevated).", isRelevant: true, cost: "Low" },
-            { id: "t4", name: "Sputum Culture", result: "Positive for Streptococcus pneumoniae.", isRelevant: true, cost: "Medium" },
-            { id: "t5", name: "Head CT Scan", result: "No acute findings. Confusion likely due to infection/hypoxia.", isRelevant: false, cost: "High" }
+            { id: "t1", name: "Physical Exam (Lungs)", result: "Crackles/rales heard in the left lower lung base. Dullness to percussion.", isRelevant: true, cost: 100 },
+            { id: "t2", name: "Chest X-Ray", result: "Lobar consolidation in the left lower lobe.", isRelevant: true, cost: 100 },
+            { id: "t3", name: "Complete Blood Count (CBC)", result: "Leukocytes: 16.5 x 10^9/L (Significantly elevated).", isRelevant: true, cost: 100 },
+            { id: "t4", name: "Sputum Culture", result: "Positive for Streptococcus pneumoniae.", isRelevant: true, cost: 300 },
+            { id: "t5", name: "Head CT Scan", result: "No acute findings. Confusion likely due to infection/hypoxia.", isRelevant: false, cost: 600 }
         ],
         diagnosisObj: {
             correctDiagnoses: ["pneumonia", "bacterial pneumonia", "strep pneumonia"],
@@ -228,11 +228,11 @@ const clinicalCases = [
             { id: "q5", text: "Do you experience headaches?", result: "Occasionally, but not right now.", isRelevant: false }
         ],
         diagnostics: [
-            { id: "t1", name: "Physical Exam", result: "Normal. No abdominal tenderness, normal heart sounds.", isRelevant: true, cost: "Low" },
-            { id: "t2", name: "12-Lead ECG", result: "Normal sinus rhythm. (Done to rule out atypical cardiac ischemia).", isRelevant: true, cost: "Low" },
-            { id: "t3", name: "Empiric trial of PPI (Omeprazole)", result: "Symptoms completely resolved after 2 weeks of use.", isRelevant: true, cost: "Low" },
-            { id: "t4", name: "Upper Endoscopy", result: "Mild irritation of the lower esophagus. No ulcers or malignancy.", isRelevant: true, cost: "Medium" },
-            { id: "t5", name: "Chest X-Ray", result: "Clear.", isRelevant: false, cost: "Low" }
+            { id: "t1", name: "Physical Exam", result: "Normal. No abdominal tenderness, normal heart sounds.", isRelevant: true, cost: 100 },
+            { id: "t2", name: "12-Lead ECG", result: "Normal sinus rhythm. (Done to rule out atypical cardiac ischemia).", isRelevant: true, cost: 100 },
+            { id: "t3", name: "Empiric trial of PPI (Omeprazole)", result: "Symptoms completely resolved after 2 weeks of use.", isRelevant: true, cost: 100 },
+            { id: "t4", name: "Upper Endoscopy", result: "Mild irritation of the lower esophagus. No ulcers or malignancy.", isRelevant: true, cost: 300 },
+            { id: "t5", name: "Chest X-Ray", result: "Clear.", isRelevant: false, cost: 100 }
         ],
         diagnosisObj: {
             correctDiagnoses: ["gerd", "gastroesophageal reflux disease", "acid reflux", "reflux"],

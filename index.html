@@ -12,7 +12,12 @@
 <body>
     <div id="app-container">
         <header id="app-header">
-            <h1>Clinical Simulation</h1>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h1 style="margin-bottom: 0;">Clinical Simulation</h1>
+                <div id="budget-display" style="font-size: 1.1rem; font-weight: 600; padding: 0.5rem 1rem; background: #e0f2fe; border: 1px solid var(--accent-color); border-radius: 8px; color: var(--accent-hover);">
+                    Budget: $<span id="budget-amount">1000</span>
+                </div>
+            </div>
             <div id="progress-bar-container">
                 <div id="progress-bar"></div>
             </div>

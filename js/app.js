@@ -2,13 +2,14 @@
 
 let clinicalCase;
 
-// Application State
 const state = {
     stage: 'anamnesis', // anamnesis, diagnostics, diagnosis, feedback
     selectedQuestions: new Set(),
     selectedDiagnostics: new Set(),
     submittedDiagnosis: '',
-    progress: 25
+    progress: 25,
+    budget: 1000,
+    initialBudget: 1000
 };
 
 const appContent = document.getElementById('app-content');
@@ -32,8 +33,14 @@ function updateProgress(stage) {
     progressBar.style.width = `${progressValue}%`;
 }
 
+function updateBudget() {
+    const budgetEl = document.getElementById('budget-amount');
+    if (budgetEl) budgetEl.innerText = state.budget;
+}
+
 function render() {
     updateProgress(state.stage);
+    updateBudget();
     appContent.innerHTML = '';
     const container = document.createElement('div');
     container.className = 'fade-in';
@@ -102,12 +109,23 @@ function renderDiagnostics(container) {
         item.className = 'list-item' + (state.selectedDiagnostics.has(t.id) ? ' selected' : '');
         item.innerHTML = `
             <div class="item-content">
-                <div class="item-title">${t.name} <span style="font-size: 0.8rem; opacity: 0.7; margin-left:10px;">(Cost: ${t.cost})</span></div>
+                <div class="item-title">${t.name} <span style="font-size: 0.8rem; opacity: 0.7; margin-left:10px;">(Cost: $${t.cost})</span></div>
                 <div class="item-result">${t.result}</div>
             </div>
         `;
         item.onclick = () => {
-            state.selectedDiagnostics.add(t.id);
+            if (state.selectedDiagnostics.has(t.id)) {
+                state.selectedDiagnostics.delete(t.id);
+                state.budget += t.cost;
+            } else {
+                if (state.budget >= t.cost) {
+                    state.selectedDiagnostics.add(t.id);
+                    state.budget -= t.cost;
+                } else {
+                    alert("Insufficient budget for this test!");
+                    return;
+                }
+            }
             render();
         };
         list.appendChild(item);
@@ -217,6 +235,7 @@ function renderFeedback(container) {
         state.selectedQuestions.clear();
         state.selectedDiagnostics.clear();
         state.submittedDiagnosis = '';
+        state.budget = state.initialBudget;
         render();
     };
 }
